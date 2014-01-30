@@ -80,9 +80,11 @@ module Rack
     end
 
     def kick_in?(env)
-      env['HTTP_X_FILE_UPLOAD'] == 'true' ||
-        ! @explicit && env['HTTP_X_FILE_UPLOAD'] != 'false' && raw_file_upload?(env) ||
-        env.has_key?('HTTP_X_FILE_UPLOAD') && env['HTTP_X_FILE_UPLOAD'] != 'false' && raw_file_upload?(env)
+      unless env['HTTP_X_FILE_NAME'].nil?
+        env['HTTP_X_FILE_UPLOAD'] == 'true' ||
+          ! @explicit && env['HTTP_X_FILE_UPLOAD'] != 'false' && raw_file_upload?(env) ||
+          env.has_key?('HTTP_X_FILE_UPLOAD') && env['HTTP_X_FILE_UPLOAD'] != 'false' && raw_file_upload?(env)
+      end
     end
 
     def raw_file_upload?(env)
